@@ -15,4 +15,4 @@ services:
     #env_file: 환경변수 파일 주입 방법
     #  - ./mysql/dev.env # mysql container 내부에서 사용되는 환경 변수
     volumes:
-      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - ./config/mysql/my.cnf:/etc/mysql/my.cnf
