@@ -1,0 +1,18 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7
+    hostname: mysql
+    container_name: ${PROJECT_NAME}-mysql # 현재 디렉토리명 (.envrc 확인)
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - ${MYSQL_PORT}:3306
+    environment: # 환경변수 명시 방법
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_PORT=${MYSQL_PORT}
+    #env_file: 환경변수 파일 주입 방법
+    #  - ./mysql/dev.env # mysql container 내부에서 사용되는 환경 변수
+    volumes:
+      - ./mysql/my.cnf:/etc/mysql/my.cnf

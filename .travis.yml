@@ -3,6 +3,12 @@ jdk:
   - openjdk8
 cache:
   directories:
+    - '$HOME/.docker'
     - '$HOME/.gradle'
+services:
+  - docker
+before_script:
+  - docker-compose up -d
+  - make database
 script:
   - ./gradlew clean build
