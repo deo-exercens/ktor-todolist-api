@@ -2,7 +2,7 @@ buildscript {
     repositories {
         jcenter()
     }
-    
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
@@ -10,6 +10,7 @@ buildscript {
 
 apply plugin: 'kotlin'
 apply plugin: 'application'
+apply plugin: 'jacoco'
 
 group 'com.exercens.deo'
 version '0.0.1-SNAPSHOT'
@@ -32,4 +33,24 @@ dependencies {
     compile "io.ktor:ktor-server-cio:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
+}
+
+test {
+    jacoco {
+        destinationFile = file("${buildDir}/jacoco/test.exec")
+    }
+}
+test.finalizedBy(jacocoTestReport)
+
+jacoco {
+    // You may modify the Jacoco version here
+    toolVersion = "0.8.4"
+}
+
+jacocoTestReport {
+    // Adjust the output of the test report
+    reports {
+        xml.enabled true
+        csv.enabled false
+    }
 }
