@@ -1,16 +1,19 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url 'https://plugins.gradle.org/m2/' }
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detekt_version"
     }
 }
 
 apply plugin: 'kotlin'
 apply plugin: 'application'
 apply plugin: 'jacoco'
+apply plugin: 'io.gitlab.arturbosch.detekt'
 
 group 'com.exercens.deo'
 version '0.0.1-SNAPSHOT'
@@ -27,8 +30,9 @@ repositories {
     mavenLocal()
     jcenter()
 }
-
 dependencies {
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-cli:$detekt_version"
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "io.ktor:ktor-server-cio:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
@@ -42,15 +46,39 @@ test {
 }
 test.finalizedBy(jacocoTestReport)
 
+// test code coverage
 jacoco {
     // You may modify the Jacoco version here
     toolVersion = "0.8.4"
 }
 
+// test code coverage report
 jacocoTestReport {
     // Adjust the output of the test report
     reports {
         xml.enabled true
         csv.enabled false
+    }
+}
+
+// 정적 분석
+detekt {
+    toolVersion = "$detekt_version"
+    input = files("src")
+    filters = ".*/resources/.*,.*/build/.*"
+    config = files("config/detekt/detekt.yml")
+    reports {
+        xml {
+            enabled = true
+            destination = file("${buildDir}/detekt/detekt.xml")
+        }
+        html {
+            enabled = true
+            destination = file("${buildDir}/detekt/detekt.html")
+        }
+        txt {
+            enabled = true
+            destination = file("${buildDir}/detekt/detekt.txt")
+        }
     }
 }

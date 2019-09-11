@@ -11,5 +11,6 @@ before_script:
   - docker-compose up -d
   - make database
 script:
-  - ./gradlew clean build
-  - ./gradlew test jacocoTestReport
+  - ./gradlew clean build           # 빌드
+  - ./gradlew detekt                # 정적 분석
+  - ./gradlew test jacocoTestReport # 테스트 코드 실행 및 coverage
