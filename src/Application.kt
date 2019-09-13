@@ -8,9 +8,7 @@ import io.ktor.routing.routing
 
 fun main(args: Array<String>): Unit = io.ktor.server.cio.EngineMain.main(args)
 
-@Suppress("unused") // Referenced in application.conf
-@kotlin.jvm.JvmOverloads
-fun Application.module(testing: Boolean = false) {
+fun Application.module() {
     routing {
         get("/") {
             call.respondText("hello world!")

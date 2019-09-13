@@ -1,22 +1,18 @@
-import io.ktor.application.ApplicationCallPipeline
-import io.ktor.application.call
+import com.exercens.deo.module
+import io.ktor.application.Application
+import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.response.respond
-import io.ktor.server.testing.it
-import io.ktor.server.testing.on
+import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 import kotlin.test.Test
-import kotlin.test.assertTrue
+import kotlin.test.assertEquals
 
-internal class ApplicationTest {
+class ApplicationTest {
     @Test
-    fun `application with handler returning true`() = withTestApplication {
-        application.intercept(ApplicationCallPipeline.Call) { call.respond(HttpStatusCode.OK) }
-        on("making a request") {
-            val call = handleRequest { }
-            it("should be handled") {
-                assertTrue(call.requestHandled)
-            }
+    fun testRequests() = withTestApplication(Application::module) {
+        with(handleRequest(HttpMethod.Get, "/")) {
+            assertEquals(HttpStatusCode.OK, response.status())
+            assertEquals("hello world!", response.content)
         }
     }
 }
